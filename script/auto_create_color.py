@@ -189,13 +189,13 @@ def process_soil_colors(soil_type_df, color_df, color_set_df):
     rec_dict = create_recommendation_dict(color_set_df)
     return assign_colors(soil_type_df, color_dict, rec_dict)
 
-color_table_path = r"C:\Users\Runker\Desktop\sb_table\土壤色标表_RGB.xlsx"
-soil_type_table_path = r"C:\Users\Runker\Desktop\sb_table\分类表_填充.xlsx"
-color_set_table_path = r"C:\Users\Runker\Desktop\sb_table\颜色推荐表.xlsx"
+color_table_path = r"D:\worker\工作\work\三普\数据\色标\更改后\土壤色标表_RGB.xlsx"
+soil_type_table_path = r"D:\worker\工作\work\三普\数据\色标\更改后\分类表_填充.xlsx"
+color_set_table_path = r"D:\worker\工作\work\三普\数据\色标\更改后\颜色推荐表.xlsx"
 color_df = pd.read_excel(color_table_path)
 soil_type_df = pd.read_excel(soil_type_table_path)
 color_set_df = pd.read_excel(color_set_table_path)
 
 result_df = process_soil_colors(soil_type_df, color_df, color_set_df)
 # 保存结果
-result_df.to_excel("result.xlsx", index=False)
+result_df.to_excel(r"D:\worker\工作\work\三普\数据\色标\更改后\result_rgb1.xlsx", index=False)
