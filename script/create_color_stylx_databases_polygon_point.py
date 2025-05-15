@@ -269,9 +269,9 @@ def add_style_to_stylx(stylx_path, excel_path, symbol_type='polygon', default_ca
 
 if __name__ == "__main__":
     # *** 指定统一的目标 .stylx 文件 ***
-    target_stylx_file = r"D:\ArcGISProjects\workspace\sp2024\style\new_soil_type_gz.stylx"
+    target_stylx_file = r"D:\ArcGISProjects\workspace\sp2024\style\new_soil_type_gz_all_texture.stylx"
     # 指定不同类型符号的数据源 Excel 文件
-    point_polygon_excel_source = r"D:\worker\工作\work\三普\数据\色标\更改后\result_rgb_新.xlsx" # 假设面数据在此文件
+    point_polygon_excel_source = r"D:\worker\工作\work\三普\数据\色标\更改后\result_rgb_新_全质地.xlsx" # 假设包含信息的面数据在此文件
 
     # --- 执行创建 ---
     # 1. 向统一文件添加面状符号
