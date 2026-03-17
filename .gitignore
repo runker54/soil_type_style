@@ -1,0 +1,21 @@
+# 忽略所有文件
+/*
+
+# 保留 .git 目录
+!/.git/
+
+# 保留 .gitignore 本身
+!/.gitignore
+
+# 保留 script 目录及其所有内容
+!/script/
+
+# 忽略 Python 缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# 忽略 Jupyter Notebook 检查点
+.ipynb_checkpoints/

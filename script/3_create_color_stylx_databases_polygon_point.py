@@ -1,13 +1,42 @@
+import os
+import shutil
 import sqlite3
 import pandas as pd
 import json
 import binascii # 虽然在当前代码中未使用，但保留以防未来需要
+
+# ==================== 面符号边框配置参数 ====================
+# 边框宽度 (0 表示无边框)
+STROKE_WIDTH = 0.1
+
+# 边框颜色 [R, G, B] - 浅灰色 (可根据需要修改)
+STROKE_COLOR = [192, 192, 192]  # 浅灰色
+# 其他常用灰色参考:
+# [128, 128, 128] - 中灰色
+# [211, 211, 211] - 浅灰色 (LightGray)
+# [169, 169, 169] - 暗灰色 (DarkGray)
+
+# 边框透明度 (0-100, 100为完全不透明)
+STROKE_OPACITY = 100
+# ===========================================================
+
 black_color = [0, 0, 0]
 
-def create_content(color_rgb):
+def create_content(color_rgb, stroke_width=None, stroke_color=None, stroke_opacity=None):
     """
-    创建面状符号CONTENT的二进制内容，color_rgb为[R,G,B]列表
+    创建面状符号CONTENT的二进制内容
+
+    参数:
+        color_rgb: [R,G,B] 列表 - 填充颜色
+        stroke_width: float - 边框宽度 (None则使用全局配置 STROKE_WIDTH)
+        stroke_color: [R,G,B] 列表 - 边框颜色 (None则使用全局配置 STROKE_COLOR)
+        stroke_opacity: int - 边框透明度 0-100 (None则使用全局配置 STROKE_OPACITY)
     """
+    # 使用传入参数或全局配置
+    width = stroke_width if stroke_width is not None else STROKE_WIDTH
+    color = stroke_color if stroke_color is not None else STROKE_COLOR
+    opacity = stroke_opacity if stroke_opacity is not None else STROKE_OPACITY
+
     # 完整的JSON结构 (面状符号)
     style_json = {
         "type": "CIMPolygonSymbol",
@@ -19,10 +48,10 @@ def create_content(color_rgb):
                 "joinStyle": "Round",
                 "lineStyle3D": "Strip",
                 "miterLimit": 4,
-                "width": 0, # 通常轮廓线宽度为0表示无轮廓，或者可以设置为正值
+                "width": width,
                 "color": {
                     "type": "CIMRGBColor",
-                    "values": color_rgb + [100]  # 添加透明度100
+                    "values": color + [opacity]
                 }
             },
             {
@@ -270,10 +299,15 @@ def add_style_to_stylx(stylx_path, excel_path, symbol_type='polygon', default_ca
 
 if __name__ == "__main__":
     # *** 指定统一的目标 .stylx 文件 ***
-    target_stylx_file = r"D:\ArcGISProjects\workspace\sp2024\style\new_soil_type_gz_all_textures.stylx"
+    template_stylx_file = r"D:\worker_code\color_table\style\template\template.stylx"
+    target_stylx_dir = r"D:\ArcGISProjects\workspace\sp2024\style"
+    target_name = "new_color_styles_20260312.stylx"
+    target_stylx_file = os.path.join(target_stylx_dir, target_name)
     # 指定不同类型符号的数据源 Excel 文件
-    point_polygon_excel_source = r"D:\worker\工作\work\三普\数据\色标\更改后\result_rgb_新_全质地.xlsx" # 假设包含信息的面数据在此文件
-
+    point_polygon_excel_source = r"D:\worker_code\color_table\table\result_rgb_新分类系统.xlsx" # 假设包含信息的面数据在此文件
+    
+    # 复制模板文件作为目标文件
+    shutil.copyfile(template_stylx_file, target_stylx_file)
     # --- 执行创建 ---
     # 1. 向统一文件添加面状符号
     print("-" * 20)
@@ -282,7 +316,6 @@ if __name__ == "__main__":
                        symbol_type='polygon', default_category='土类') # 指定面状符号类型和默认类别
     print("面状符号添加/更新流程结束。")
     print("-" * 20)
-
     # 2. 向同一个文件添加点状符号
     print("\n" + "-" * 20)
     print(f"开始向 {target_stylx_file} 添加点状符号...")
@@ -291,6 +324,5 @@ if __name__ == "__main__":
                        symbol_type='point', default_category='标记点') # 指定点状符号类型和默认类别
     print("点状符号添加/更新流程结束。")
     print("-" * 20)
-
     print(f"\n所有符号已添加/更新到文件: {target_stylx_file}")
     print("所有任务完成。")
